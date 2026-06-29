@@ -96,9 +96,20 @@ async function createPlayer(newPlayer) {
  * Unless we know the id of the player we are trying to remove, we cannot call removePlayer()
  */
 
-const removePlayer = async (playerId) => {
-  //TODO
-};
+async function deletePlayer(player) {
+  try {
+    const response = await fetch(API + "/players/" + player.id, {
+      method: "DELETE",
+    });
+    selectedPlayer = null;
+    const newPlayerList = await fetch(API + "/players");
+    const newPlayers = await newPlayerList.json();
+    players = newPlayers.data;
+    render();
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 /**
  * Updates html to display a list of all players or a single player page.
