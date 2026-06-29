@@ -103,9 +103,9 @@ async function deletePlayer(player) {
       method: "DELETE",
     });
     selectedPlayer = null;
-    const newPlayerList = await fetch(API + "/players");
-    const newPlayers = await newPlayerList.json();
-    players = newPlayers.data;
+    const response = await fetch(API + "/players");
+    const result = await response.json();
+    players = result.data.players;
     render();
   } catch (error) {
     console.error(error);
