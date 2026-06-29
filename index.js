@@ -25,7 +25,7 @@ async function getPlayers() {
   try {
     const response = await fetch(API + "/players");
     const result = await response.json();
-    players = result.data;
+    players = result.data.players;
     render();
   } catch (error) {
     console.error(error);
@@ -46,7 +46,7 @@ async function getPlayer(id) {
   try {
     const response = await fetch(API + "/players/" + id);
     const result = await response.json();
-    selectedPlayer = result.data;
+    selectedPlayer = result.data.player;
     render();
   } catch (error) {
     console.error(error);
@@ -77,8 +77,9 @@ async function createPlayer(newPlayer) {
       },
       body: JSON.stringify(newPlayer),
     });
+    console.log(response);
     const result = await response.json();
-    players.push(result.data);
+    players.push(result.data.newPlayer);
     render();
   } catch (error) {
     console.error(error);
@@ -122,7 +123,7 @@ function PlayerListItem(player) {
 
 function PlayerList() {
   const $ul = document.createElement("ul");
-  $ul.classList.add("Players");
+  $ul.classList.add("players");
   const $players = players.map(PlayerListItem);
   $ul.replaceChildren(...$players);
   return $ul;
@@ -146,6 +147,43 @@ function SelectedPlayer() {
   const deleteButton = $player.querySelector("button");
   deleteButton.addEventListener("click", () => deletePlayer(selectedPlayer));
   return $player;
+}
+
+function PlayerForm() {
+  const $form = document.createElement("form");
+  $form.innerHTML = `
+  <label>
+    Name
+    <input name="name" required/>
+  </label>
+  <label>
+    Breed
+    <input name="breed" required/>
+  </label>
+  <label>
+    Team name
+    <input name="team" required/>
+  </label>
+  <button>Add new player</button>
+  `;
+
+  // <label>
+  //   Status
+  //   <input name="status" required/>
+  // </label>
+
+  $form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const data = new FormData($form);
+    const player = {
+      name: data.get("name"),
+      breed: data.get("breed"),
+      // status: data.get("status"),
+      teamId: data.get("team"),
+    };
+    createPlayer(player);
+  });
+  return $form;
 }
 
 /**
@@ -182,7 +220,7 @@ function render() {
   </main>
   `;
 
-  $app.querySelector("PlayerList").replaceWith(getPlayers());
+  $app.querySelector("PlayerList").replaceWith(PlayerList());
   $app.querySelector("SelectedPlayer").replaceWith(SelectedPlayer());
   $app.querySelector("PlayerForm").replaceWith(PlayerForm());
 }
