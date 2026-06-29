@@ -111,6 +111,43 @@ async function deletePlayer(player) {
   }
 }
 
+function PlayerListItem(player) {
+  const $li = document.createElement("li");
+  $li.innerHTML = `
+  <button>${player.name}</button>
+  `;
+  $li.addEventListener("click", () => getPlayer(player.id));
+  return $li;
+}
+
+function PlayerList() {
+  const $ul = document.createElement("ul");
+  $ul.classList.add("Players");
+  const $players = players.map(PlayerListItem);
+  $ul.replaceChildren(...$players);
+  return $ul;
+}
+
+function SelectedPlayer() {
+  if (!selectedPlayer) {
+    const $p = document.createElement("p");
+    $p.textContent = "Please selected a player to learn more.";
+    return $p;
+  }
+  const $player = document.createElement("section");
+  $player.innerHTML = `
+  <h3>${selectedPlayer.name} #${selectedPlayer.id}</h3>
+  <h3>Breed: ${selectedPlayer.breed}</h3>
+  <h3>Status: ${selectedPlayer.status}</h3>
+  <img id=player" src=${selectedPlayer.imageUrl} alt=${selectedPlayer.name} />
+  <h3>Team name: ${selectedPlayer.teamId}</h3>
+  <button>Delete Player</button>
+  `;
+  const deleteButton = $player.querySelector("button");
+  deleteButton.addEventListener("click", () => deletePlayer(selectedPlayer));
+  return $player;
+}
+
 /**
  * Updates html to display a list of all players or a single player page.
  *
@@ -127,18 +164,36 @@ async function deletePlayer(player) {
  *    from the database and our current view without having to refresh
  *
  */
-const render = () => {
-  // TODO
-};
+function render() {
+  const $app = document.querySelector("#app");
+  $app.innerHTML = `
+  <h1>Puppy Bowl Players</h1>
+  <main>
+    <section>
+      <h2>Player List</h2>
+      <PlayerList></PlayerList>
+      <h2>Add Player</h2>
+      <PlayerForm></PlayerForm>
+    </section>
+    <section id="selected">
+      <h2>Player Details</h2>
+      <SelectedPlayer></SelectedPlayer>
+    </section>
+  </main>
+  `;
+
+  $app.querySelector("PlayerList").replaceWith(getPlayers());
+  $app.querySelector("SelectedPlayer").replaceWith(SelectedPlayer());
+  $app.querySelector("PlayerForm").replaceWith(PlayerForm());
+}
 
 /**
  * Initializes the app by calling render
  * HOWEVER....
  */
-const init = async () => {
-  //Before we render, what do we always need?
-
+async function init() {
+  await getPlayers();
   render();
-};
+}
 
 init();
