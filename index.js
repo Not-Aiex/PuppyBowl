@@ -8,7 +8,11 @@
 
 ////////////////////////////
 
+const BASE = "https://fsa-puppy-bowl.herokuapp.com/api/";
+const COHORT = "2605-ALEX";
+const API = BASE + COHORT;
 /**
+ *
  * Fetches all players from the API.
  * This function should not be doing any rendering
  * Instead, this function should be keeping our state up to date
