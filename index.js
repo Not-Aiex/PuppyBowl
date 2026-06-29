@@ -134,7 +134,7 @@ function PlayerList() {
 function SelectedPlayer() {
   if (!selectedPlayer) {
     const $p = document.createElement("p");
-    $p.textContent = "Please selected a player to learn more.";
+    $p.textContent = "Please select a player to learn more.";
     return $p;
   }
   const $player = document.createElement("section");
