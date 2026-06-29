@@ -11,15 +11,26 @@
 const BASE = "https://fsa-puppy-bowl.herokuapp.com/api/";
 const COHORT = "2605-ALEX";
 const API = BASE + COHORT;
+
+let players = [];
+let selectedPlayer = null;
+
 /**
  *
  * Fetches all players from the API.
  * This function should not be doing any rendering
  * Instead, this function should be keeping our state up to date
  */
-const fetchAllPlayers = async () => {
-  //TODO
-};
+async function getPlayers() {
+  try {
+    const response = await fetch(API + "/players");
+    const result = await response.json();
+    players = result.data;
+    render();
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 /**
  * Fetches a single player from the API.
@@ -31,9 +42,16 @@ const fetchAllPlayers = async () => {
  * Note: In order to call fetchSinglePlayer() a player's id is required.
  * Unless we know the id of the player we are trying to fetch, we cannot call fetchSinglePlayer()
  */
-const fetchSinglePlayer = async (playerId) => {
-  //TODO
-};
+async function getPlayer(id) {
+  try {
+    const response = await fetch(API + "/players/" + id);
+    const result = await response.json();
+    selectedPlayer = result.data;
+    render();
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 /**
  * Adds a new player to the roster via the API.
@@ -50,9 +68,22 @@ const fetchSinglePlayer = async (playerId) => {
  * create a new player object and then pass it to addNewPlayer()?
  */
 
-const addNewPlayer = async (newPlayer) => {
-  //TODO
-};
+async function createPlayer(newPlayer) {
+  try {
+    const response = await fetch(API + "/players", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPlayer),
+    });
+    const result = await response.json();
+    players.push(result.data);
+    render();
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 /**
  * Removes a player from the roster via the API.
