@@ -68,16 +68,17 @@ async function getPlayer(id) {
  * create a new player object and then pass it to addNewPlayer()?
  */
 
-async function createPlayer(newPlayer) {
+async function createPlayer(player) {
   try {
     const response = await fetch(API + "/players", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newPlayer),
+      body: JSON.stringify(player),
     });
     console.log(response);
+    console.log(player);
     const result = await response.json();
     players.push(result.data.newPlayer);
     render();
@@ -103,9 +104,9 @@ async function deletePlayer(player) {
       method: "DELETE",
     });
     selectedPlayer = null;
-    const response = await fetch(API + "/players");
-    const result = await response.json();
-    players = result.data.players;
+    const newPlayerList = await fetch(API + "/players");
+    const newPlayers = await newPlayerList.json();
+    players = newPlayers.data.players;
     render();
   } catch (error) {
     console.error(error);
@@ -161,8 +162,15 @@ function PlayerForm() {
     <input name="breed" required/>
   </label>
   <label>
+    Status
+    <select name="status" required>
+      <option value="bench">Bench</option>
+      <option value="field">Field</option>
+    </select>
+  </label>
+  <label>
     Team name
-    <input name="team" required/>
+    <input type="number" name="team"/>
   </label>
   <button>Add new player</button>
   `;
@@ -178,7 +186,7 @@ function PlayerForm() {
     const player = {
       name: data.get("name"),
       breed: data.get("breed"),
-      // status: data.get("status"),
+      status: data.get("status"),
       teamId: data.get("team"),
     };
     createPlayer(player);
