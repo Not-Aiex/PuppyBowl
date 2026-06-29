@@ -1,4 +1,15 @@
-img {
+#player {
+  width: 8ch;
+  height: auto;
+}
+#selectedPlayer {
   width: 20ch;
   height: auto;
+}
+li {
+  display: flex;
+  align-items: center;
+  img {
+    padding-left: 2ch;
+  }
 }

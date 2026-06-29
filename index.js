@@ -117,6 +117,7 @@ function PlayerListItem(player) {
   const $li = document.createElement("li");
   $li.innerHTML = `
   <button>${player.name}</button>
+  <img id="player"src=${player.imageUrl} alt=${player.name}/>
   `;
   $li.addEventListener("click", () => getPlayer(player.id));
   return $li;
@@ -141,7 +142,7 @@ function SelectedPlayer() {
   <h3>${selectedPlayer.name} #${selectedPlayer.id}</h3>
   <h3>Breed: ${selectedPlayer.breed}</h3>
   <h3>Status: ${selectedPlayer.status}</h3>
-  <img id=player" src=${selectedPlayer.imageUrl} alt=${selectedPlayer.name} />
+  <img id="selectedPlayer" src=${selectedPlayer.imageUrl} alt=${selectedPlayer.name} />
   <h3>Team name: ${selectedPlayer.teamId}</h3>
   <button>Delete Player</button>
   `;
